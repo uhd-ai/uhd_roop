@@ -19,6 +19,7 @@ import tensorflow
 import roop.globals
 import roop.metadata
 import roop.ui as ui
+from tqdm import tqdm
 from roop.predictor import predict_image, predict_video
 from roop.processors.frame.core import get_frame_processors_modules
 from roop.utilities import has_image_extension, is_image, is_video, detect_fps, create_video, extract_frames, \
@@ -30,14 +31,14 @@ warnings.filterwarnings('ignore', category=FutureWarning, module='insightface')
 warnings.filterwarnings('ignore', category=UserWarning, module='torchvision')
 
 
-target_path = "/content/drive/MyDrive/sber-swap/target_new"
-# target_path = "/content/target"
-jpg_files = [f for f in os.listdir(target_path) if (f.endswith('.jpg') or f.endswith('.mp4'))]
+# target_path = "/content/drive/MyDrive/sber-swap/target_new"
+target_path = "/content/target"
+jpg_files = [f for f in os.listdir(target_path) if (f.endswith('.jpg') or f.endswith('.mp4') or f.endswith('.png'))]
 print(jpg_files)
 
 
 def parse_args() -> None:
-    for jpg_file in jpg_files:
+    for jpg_file in tqdm(jpg_files):
         jpg_path = os.path.join(target_path, jpg_file)
         print(f"jpg_path : {jpg_path}")
         signal.signal(signal.SIGINT, lambda signal_number, frame: destroy())
@@ -259,7 +260,7 @@ def destroy() -> None:
 
 def run() -> None:
 
-    for jpg_file in jpg_files:
+    for jpg_file in tqdm(jpg_files):
 
         signal.signal(signal.SIGINT, lambda signal_number, frame: destroy())
         program = argparse.ArgumentParser(
